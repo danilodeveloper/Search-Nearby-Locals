@@ -1,0 +1,54 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+/* IPHONE */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+	* {
+		font-size: 150%;
+	}
+
+	.busca {
+		width: 100%;
+		color: green;
+		border: #CCC solid 1px;
+		padding: 20px;
+		margin-top: 14px;
+		font-size: 180%;
+	}
+}
+
+.nota {
+	color: green;
+}
+
+.distancia {
+	color: blue;
+}
+
+ul {
+	list-style: none;
+	margin-left: 0px;
+	padding-left: 0px;
+}
+
+li {
+	padding-left: 5px;
+	line-height: 60px;
+	vertical-align: middle;
+}
+
+/* Alterna cor da lina */
+li:nth-child(odd) { background: rgb(216, 223, 229); }
