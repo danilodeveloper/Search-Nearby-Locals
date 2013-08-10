@@ -3,10 +3,12 @@ $(function(){
 
 var atual;
 
+// Trigger do clique de botão pesquisa
 $("#procurar").click(function(){
 	pegarLocalizacao();
 });
-  
+
+// Retorna localização
 function pegarLocalizacao()
 {
     if (navigator.geolocation)
@@ -14,7 +16,7 @@ function pegarLocalizacao()
     else
       alert("Geolocalização não suportada");
 }
-  
+
 function showPosition(position)
 {
     var lat, lon, url;
@@ -71,6 +73,9 @@ function callback(results, status) {
         if("photos" in results[i])
           resultados += " - <img src=\"" + results[i].photos[0].getUrl({maxWidth: 50, maxHeight: 50}) + "\" />";
 
+        // Mapa
+        resultados += " - <a href=\"javascript: exibeMapa();\">Mapa</a>";
+
         resultados += "</li>";
       }
 
@@ -98,3 +103,19 @@ calculaDistancia = function(p1, p2) {
   return d.toFixed(1);
 }
 
+// Mostra local no Google Maps
+function exibeMapa() {
+  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+  var mapOptions = {
+    zoom: 4,
+    center: myLatlng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+  var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      title: 'Hello World!'
+  });
+}
