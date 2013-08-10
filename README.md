@@ -1,0 +1,1 @@
+Uma aplicação simples em RAILS + JAVASCRIPT para localizar lugares interessantes próximos ao usuário.
