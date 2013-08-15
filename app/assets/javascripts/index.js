@@ -1,38 +1,103 @@
 
+var atual;
+var lat, lon;
+
 $(function(){
 
-var atual;
+  // Descobre localização atual
+  pegarLocalizacao();
 
-// Trigger do clique de botão pesquisa
-$("#procurar").click(function(){
-	pegarLocalizacao();
+  // Carrega categorias de pesquisa
+  listaCategorias();
+
+  // Trigger do clique de botão pesquisa
+  $("#procurar").click(function(){
+  	listaLocais(lat, lon, $("#tipo").find("option:selected").val(), $("#distancia").val());
+  });
 });
+
+// Preenche categorias para pesquisa
+function listaCategorias() {
+  var url = "https://api.foursquare.com/v2/venues/categories?client_id=PKAHBB1OAX0B000CG5UUYO4BXV0LWQWKFB51EK3XVNFJ2ULS&client_secret=RDPX01C01RHCYASZIKVH5XXMPVFIPLFHFP1D53UR4GUWQD50&v=20120101"
+
+  $.getJSON(url, function(data){
+
+    // Para cada categoria pai
+    for(var i = 0; i < data.response.categories.length; i++) {
+
+      // Para cada categoria filho
+      for(var j = 0; j < data.response.categories[i].categories.length; j++) {
+        $("#tipo").append(
+          new Option(data.response.categories[i].name + " - " + data.response.categories[i].categories[j].name, data.response.categories[i].categories[j].id)
+        );
+      }
+    }
+  });
+
+}
 
 // Retorna localização
 function pegarLocalizacao()
 {
     if (navigator.geolocation)
-      navigator.geolocation.getCurrentPosition(showPosition);
+      navigator.geolocation.getCurrentPosition(gravaLocalizacao);
     else
       alert("Geolocalização não suportada");
 }
 
-function showPosition(position)
+function gravaLocalizacao(position)
 {
-    var lat, lon, url;
+    var url;
 
+    // Grava localização
     lat = position.coords.latitude;
     lon = position.coords.longitude;
+    
+    // Descobre endereço
     url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&sensor=false";
-
     $.getJSON(url, function(data){
       	$("#endereco").html("<p>" + data.results[0].formatted_address + "</p>");
     });
 
-    listaLocais(lat, lon, $("#tipo").find("option:selected").val(), $("#distancia").val());
+    //listaLocais(lat, lon, $("#tipo").find("option:selected").val(), $("#distancia").val());
+}
+
+// Lista locais baseado na localização
+function listaLocais(lat, lon, tipo, distancia) {
+
+    var url; // url de chamado do JSON
+    var limit = 5; // limite de resultados
+    var radius = distancia; // raio
+    var client_id = "PKAHBB1OAX0B000CG5UUYO4BXV0LWQWKFB51EK3XVNFJ2ULS"; // id
+    var client_secret = "RDPX01C01RHCYASZIKVH5XXMPVFIPLFHFP1D53UR4GUWQD50"; // senha
+
+    url = "https://api.foursquare.com/v2/venues/search?ll=" + lat + "," + lon + "&" +
+      "limit=" + limit + "&" +
+      "radius=" + radius + "&" +
+      "client_id=" + client_id + "&" +
+      "client_secret=" + client_secret + "&" +
+      "categoryId=" + tipo +
+      "&v=20120101";
+
+      console.log(url);
+
+    // Monta saída html
+    $.getJSON(url, function(data){
+      var resultado = ""; // saída html
+
+      for(var i = 0; i < data.response.venues.length; i++) {
+        resultado += "<li>" + data.response.venues[i].name + "</li>";
+      }
+
+      // Exibe saída html
+      $("#locais").html("<ul>" + resultado + "</ul>");
+    });
 }
 
 // Inicia Google Maps
+/*
+ANTIGO UTILIZANDO GOOGLE MAPS
+
 function listaLocais(lat, lon, tipo, distancia) {
 
     var map;
@@ -55,9 +120,10 @@ function listaLocais(lat, lon, tipo, distancia) {
     var service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request, callback);
 }
+*/
 
 // Retorno do listaLocais
-function callback(results, status) {
+/*function callback(results, status) {
 
     var resultados = "";
 
@@ -84,8 +150,7 @@ function callback(results, status) {
     else {
       $("#locais").html("Nenhum resultado encontrado!");
     }
-}
-});
+}*/
 
 // Calcula distancia entre dois pontos
 rad = function(x) {return x*Math.PI/180;}
