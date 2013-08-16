@@ -84,15 +84,29 @@ function listaLocais(lat, lon, tipo, distancia) {
       var resultado = ""; // saída html
 
       for(var i = 0; i < data.response.venues.length; i++) {
-        resultado += "<li>" + data.response.venues[i].name + " - " +
-          (Math.round(data.response.venues[i].location.distance / 100) / 10) + " km - " +
-          "<a href=\"javascript:exibeMapa(" + data.response.venues[i].location.lat + ", " + data.response.venues[i].location.lng + ")\">Mapa</a>" +
-          "</li>";
+        resultado += '<li><a href="#" onclick="javascript:exibeDetalhes(this, ' + data.response.venues[i].location.lat + ', ' + data.response.venues[i].location.lng + ')">' + data.response.venues[i].name + '</a> - ' +
+          (Math.round(data.response.venues[i].location.distance / 100) / 10) + ' km'+
+          '</li>';
       }
 
       // Exibe saída html
       $("#locais").html("<ul>" + resultado + "</ul>");
     });
+}
+
+// Exibe detalhes do local
+function exibeDetalhes(item, lat, lon) {
+
+  var listItem = $(item).parent();
+
+  // Esconde detalhes anteriores
+  $("#detalhes").remove();
+
+  // Cria novo div de detalhes abaixo do local selecionado
+  listItem.append('<div id="detalhes"><div id="mapa"></div></div>');
+
+  // Exibe mapa
+  exibeMapa(lat, lon);
 }
 
 // Mostra local no Google Maps
