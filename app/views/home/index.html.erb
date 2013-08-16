@@ -1,13 +1,18 @@
+<!-- Viewport iPhone -->
+<meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0" />
+
 <!-- Google Maps API -->
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=places"></script>
 <%= javascript_include_tag "index" %>
 
-<h1>Geolocalização HTML5</h1>
+<div id="top">
+	<h1>Geolocalização HTML5</h1>
+	<select id="tipo">
+	</select>
+	até <input type="number" id="distancia" min="1" max="50" value="3" pattern="\d*" /> km
+	<button id="procurar" class="busca">Procurar</button>
+</div>
 
-<select id="tipo">
-</select>
-até <input type="number" id="distancia" min="1" max="50000" value="3000" pattern="\d*" /> metros
-<button id="procurar" class="busca">Procurar</button>
 <div id="endereco"></div>
+<div id="mapa"></div>
 <div id="locais"></div>
-<div id="map-canvas"></div>
