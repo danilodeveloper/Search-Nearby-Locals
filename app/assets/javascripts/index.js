@@ -20,7 +20,7 @@ var NearbyLocals = (function(){
         "&v=20120101";
     };
 
-
+    // public methods and variables here
     return {
         listar_categorias: function(){
             $.getJSON(_url, function(data){
@@ -43,7 +43,7 @@ var NearbyLocals = (function(){
             else
                 alert("Geolocalização não suportada");
         },
-        gravar_localizacao: function(){
+        gravar_localizacao: function(position){
 
             _lat = position.coords.latitude;
             _lon = position.coords.longitude;
@@ -71,7 +71,7 @@ var NearbyLocals = (function(){
             });
         },
         exibir_detalhes: function(obj, lat, lon){
-            var listItem = $(item).parent();
+            var listItem = $(obj).parent();
 
             // Esconde detalhes anteriores
             $("#detalhes").remove();
@@ -80,7 +80,7 @@ var NearbyLocals = (function(){
             listItem.append('<div id="detalhes"><div id="mapa"></div></div>');
 
             // Exibe mapa
-            exibir_mapa(lat, lon);
+            this.exibir_mapa(lat, lon);
         },
         exibir_mapa: function(lat, lon){
             $("#mapa").empty();
